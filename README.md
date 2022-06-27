@@ -9,6 +9,11 @@ A flutter plugin that takes advantage of [AlarmManager](https://developer.androi
 
 Notification actions can be set up, and code can be run from the flutter side of the application to handle these events.
 
+Here's a screen record of [FlutterAlarmNotification] in action.
+> You can find the sample example in `/example/lib` folder.
+
+![Screen record of [FlutterAlarmNotification] in action](example/display/alarm_display.gif)
+
 ### Getting Started
 To get started do the following:
 
@@ -155,6 +160,7 @@ This plugin is still in its early stages, as such is missing some implementation
 ### Checklist
 - [x] Implement repeating alarms for android.
 - [x] Run flutter code when notification is interacted with.
+- [ ] Write unit test cases.
 - [ ] Implement one-shot alarms for android.
 - [ ] Flexibility in setting alarm ringtone.
 - [ ] Implement these features in IOS.
