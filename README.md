@@ -126,15 +126,11 @@ There are two ways of handling notification actions.
             _pushNewScreen(message);
         });
 
-        final isEmpty = await stream.isEmpty;
-
         /// If there was a pending event before [HomeScreen] was created, handle it
-        if (!isEmpty) {
-            final last = await stream.last;
+        final last = FlutterAlarmNotification.cache;
 
-            if (last != null) {
-                _pushNewScreen(last);
-            }
+        if (last.isNotEmpty) {
+            _pushNewScreen(last);
         }
        
     }
