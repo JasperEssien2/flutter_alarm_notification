@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_alarm_notification/export.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterAlarmNotification.initialize();
@@ -13,8 +15,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(),
+    return MaterialApp(
+      navigatorKey: navigatorKey,
+      home: const HomeScreen(),
     );
   }
 }
@@ -43,14 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
       _pushNewScreen(message);
     });
 
-    final isEmpty = await stream.isEmpty;
+    final last = FlutterAlarmNotification.cache;
 
-    if (!isEmpty) {
-      final last = await stream.last;
-
-      if (last != null) {
-        _pushNewScreen(last);
-      }
+    if (last.isNotEmpty) {
+      _pushNewScreen(last);
     }
   }
 

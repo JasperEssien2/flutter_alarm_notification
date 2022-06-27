@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'enum.dart';
 
 class AlarmConfig {
@@ -86,7 +84,6 @@ class NotificationBuilder {
   final List<NotificationAction>? actions;
 
   Map<String, dynamic> get toMap {
-
     return {
       'notification_title': notificationTitle,
       'notification_description': notificationDescription,

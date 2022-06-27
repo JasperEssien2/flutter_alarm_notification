@@ -13,6 +13,15 @@ const String _buttonActionIsolateName = "button-action-isolate";
 
 class FlutterAlarmNotification {
   static final _uiReceivePort = ReceivePort();
+  static final Map _cache = {};
+
+  static Map get cache {
+    final cache = Map.from(_cache);
+
+    _cache.clear();
+
+    return cache;
+  }
 
   static Stream<dynamic> get listenable => _uiReceivePort.asBroadcastStream();
 
@@ -38,13 +47,17 @@ class FlutterAlarmNotification {
 
   @visibleForTesting
   static void onAction(dynamic action, Map data) {
+    log("FlutterSide === onAction($action, $data)");
+
     final uiSendport =
         IsolateNameServer.lookupPortByName(_buttonActionIsolateName);
 
-    uiSendport?.send({
+    final message = {
       'action': action,
       'data': data,
-    });
+    };
+    _cache.addAll(message);
+    uiSendport?.send(message);
     FlutterAlarmNotificationPlatform.instance.dismissNotification();
   }
 

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ void callbackDispatcher() {
     (call) async {
       final args = call.arguments;
 
-      log("AlarmReceiver FLUTTER SIDE BACKGROUNC CHANNEL ====== ${call.method} ");
       final callbackThis = PluginUtilities.getCallbackFromHandle(
           CallbackHandle.fromRawHandle(args[0]));
 
@@ -28,7 +26,6 @@ void callbackDispatcher() {
       Map data = args[2];
 
       callbackThis!(action, data);
-
     },
   );
 }
