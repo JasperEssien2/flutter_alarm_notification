@@ -52,9 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _pushNewScreen(last);
       }
     }
-    stream.listen((message) {
-      _pushNewScreen(message);
-    });
   }
 
   void _pushNewScreen(message) {
