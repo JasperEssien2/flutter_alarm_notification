@@ -103,6 +103,7 @@ NotificationBuilder(
 To set notification actions, pass a list of `NotificationAction` setting the following parameters:
 - `actionText` : The action displayed on the button.
 - `data` Pass any extra data needed to handle that notification action.
+- `launchAppOnTap` : If tapping on this action should launch the application, set this to true; else set to false.
 
 #### Handling notification action
 There are two ways of handling notification actions.
