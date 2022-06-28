@@ -46,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
       _pushNewScreen(message);
     });
 
-    final last = FlutterAlarmNotification.cache;
+    final cachedMessage = await FlutterAlarmNotification.cachedMessage;
 
-    if (last.isNotEmpty) {
-      _pushNewScreen(last);
+    if (cachedMessage != null) {
+      _pushNewScreen(cachedMessage);
     }
   }
 
@@ -58,8 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (c) => SecondScreen(
-          action: message['action'],
-          data: message['data'].toString(),
+          data: message.toString(),
         ),
       ),
     );
@@ -109,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         NotificationAction(
                           actionText: "Cancel",
                           data: {"negative": 'go'},
+                          launchAppOnTap: false,
                         ),
                       ],
                     ),
@@ -167,11 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
 class SecondScreen extends StatelessWidget {
   const SecondScreen({
     Key? key,
-    required this.action,
     required this.data,
   }) : super(key: key);
 
-  final String action;
   final String data;
 
   @override
@@ -182,7 +180,7 @@ class SecondScreen extends StatelessWidget {
       ),
       body: Center(
         child: Text(
-          "This Notification is action $action with data $data",
+          "This Notification is with data $data",
           style: const TextStyle(fontSize: 20),
         ),
       ),

@@ -48,6 +48,7 @@ class AlarmManagerHelper {
                     Action(
                         it["action_text"] as String,
                         it["data"] as HashMap<String, String>,
+                        it["launch_app_on_tap"] as Boolean,
                     )
                 )
             }
@@ -316,4 +317,7 @@ data class Action(
 
     @SerializedName("data")
     val data: HashMap<String, String>,
+
+    @SerializedName("launch_app_on_tap")
+    val launchAppOnTap: Boolean,
 )

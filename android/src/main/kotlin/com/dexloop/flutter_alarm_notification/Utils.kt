@@ -72,6 +72,7 @@ fun Context.showNotification(
                 intentData =  hashMapOf(),
                 callbackHandle = alarmConfig.callbackHandle,
                 callbackDispatcherHandle = alarmConfig.callbackDispatcherHandle,
+                launchAppOnTap = true,
             ), true
         )
 
@@ -86,6 +87,7 @@ fun Context.showNotification(
                     intentData = action.data,
                     callbackHandle = alarmConfig.callbackHandle,
                     callbackDispatcherHandle = alarmConfig.callbackDispatcherHandle,
+                    launchAppOnTap = action.launchAppOnTap,
                 ),
             ).build()
 
@@ -148,6 +150,7 @@ private fun Context.pendingIntent(
     intentData: HashMap<String, String>?,
     callbackDispatcherHandle: Long,
     callbackHandle: Long,
+    launchAppOnTap: Boolean,
 ): PendingIntent {
 
     val intent = Intent(this, AlarmReceiver::class.java)
@@ -156,6 +159,7 @@ private fun Context.pendingIntent(
     intent.putExtra("packageName", packageName)
     intent.putExtra("callbackDispatcherHandle", callbackDispatcherHandle)
     intent.putExtra("callbackHandle", callbackHandle)
+    intent.putExtra("launchAppOnTap", launchAppOnTap)
 
 
     // flags and request code are 0 for the purpose of demonstration

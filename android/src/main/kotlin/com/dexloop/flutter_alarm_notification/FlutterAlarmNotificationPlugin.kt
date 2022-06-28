@@ -60,6 +60,10 @@ class FlutterAlarmNotificationPlugin : FlutterPlugin, MethodCallHandler {
             "dismissNotification" -> {
                 context.dismissNotification()
             }
+
+            "retrieveCacheActionMessage" -> {
+                result.success(SharedPreferenceHelper.retrieveActionMessage(context))
+            }
         }
 
     }

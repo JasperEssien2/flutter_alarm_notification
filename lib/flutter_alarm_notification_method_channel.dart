@@ -14,6 +14,7 @@ class MethodChannelFlutterAlarmNotification
   static const _cancelAllAlarm = "cancelAllAlarm";
   static const _initialiseService = 'initializeService';
   static const _dismissNotification = 'dismissNotification';
+  static const _cachedMessage = 'retrieveCacheActionMessage';
 
   /// The method channel used to interact with the native platform.
   static const methodChannel = MethodChannel('flutter_alarm_notification');
@@ -22,7 +23,7 @@ class MethodChannelFlutterAlarmNotification
   Future<void> registerRepeatingAlarm({
     required AlarmConfig alarmConfig,
     required NotificationBuilder notificationBuilder,
-    required Function(dynamic action, Map data) onAction,
+    required Function(bool fromForeground, Map data) onAction,
   }) async {
     var raw = PluginUtilities.getCallbackHandle(onAction);
 
@@ -59,5 +60,10 @@ class MethodChannelFlutterAlarmNotification
   @override
   Future<void> dismissNotification() async {
     await methodChannel.invokeMapMethod(_dismissNotification);
+  }
+
+  @override
+  Future<String?> retrieveCachedMessage() async {
+    return await methodChannel.invokeMethod(_cachedMessage);
   }
 }

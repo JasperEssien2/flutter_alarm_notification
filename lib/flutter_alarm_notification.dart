@@ -1,29 +1,36 @@
-import 'dart:developer';
+import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
-
 import 'export.dart';
 import 'flutter_alarm_notification_platform_interface.dart';
 
-typedef NotificationActionCallback = Function(dynamic action, Map? data);
+typedef NotificationActionCallback = Function(Map? message);
 
 const String _buttonActionIsolateName = "button-action-isolate";
 
 class FlutterAlarmNotification {
   static final _uiReceivePort = ReceivePort();
-  static final Map _cache = {};
 
-  static Map get cache {
-    final cache = Map.from(_cache);
+  static Future<Map?> get cachedMessage async {
+    final String? message =
+        await FlutterAlarmNotificationPlatform.instance.retrieveCachedMessage();
+    debugPrint(
+        "Message json ============= $message == TIME : ${DateTime.now().millisecondsSinceEpoch}");
+    if (message == null) return null;
+    final messageJson = json.decode(message..replaceAll("\n", ""));
 
-    _cache.clear();
-
-    return cache;
+    return messageJson;
   }
 
   static Stream<dynamic> get listenable => _uiReceivePort.asBroadcastStream();
+
+  static Future<void> initialize(
+      {NotificationActionCallback? actionCallback}) async {
+    registerPort(callback: actionCallback);
+
+    await FlutterAlarmNotificationPlatform.initialize();
+  }
 
   static registerPort({NotificationActionCallback? callback}) {
     IsolateNameServer.registerPortWithName(
@@ -31,32 +38,16 @@ class FlutterAlarmNotification {
 
     if (callback != null) {
       listenable.listen((message) {
-        log("UI RECEIVE PORT GOT A MESSAGE ====== $message");
-        callback(message['action'], message['data']);
+        callback(message);
       });
     }
   }
 
-  static Future<void> initialize(
-      {NotificationActionCallback? actionCallback}) async {
-
-    registerPort(callback: actionCallback);
-
-    await FlutterAlarmNotificationPlatform.initialize();
-  }
-
   @visibleForTesting
-  static void onAction(dynamic action, Map data) {
-    log("FlutterSide === onAction($action, $data)");
-
+  static void onAction(bool fromForeground, Map message) async {
     final uiSendport =
         IsolateNameServer.lookupPortByName(_buttonActionIsolateName);
 
-    final message = {
-      'action': action,
-      'data': data,
-    };
-    _cache.addAll(message);
     uiSendport?.send(message);
     FlutterAlarmNotificationPlatform.instance.dismissNotification();
   }

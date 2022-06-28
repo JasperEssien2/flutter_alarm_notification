@@ -81,13 +81,21 @@ class AlarmReceiver : BroadcastReceiver(), MethodChannel.MethodCallHandler {
         }
 
         Log.i("AlarmReceiver", "isAppOnForeground ==== $appOnForeground")
+        val launchAppOnTap = intent.getBooleanExtra("launchAppOnTap", true);
 
-        if (!appOnForeground) {
+        if (!appOnForeground && launchAppOnTap) {
             val launchIntent: Intent = FlutterActivity
                 .createDefaultIntent(context)
 
             launchIntent.flags = FLAG_ACTIVITY_NEW_TASK
 
+            /// If the notification was tapped from background
+            /// cache the notification message, so that it can be
+            /// gotten on the flutter side
+            SharedPreferenceHelper.cacheActionMessage(
+                context,
+                message = intent.getSerializableExtra("intentData") as HashMap<String, Any>
+            )
             startActivity(
                 context,
                 launchIntent,
@@ -114,7 +122,7 @@ class AlarmReceiver : BroadcastReceiver(), MethodChannel.MethodCallHandler {
 
         val args = listOf<Any?>(
             intent.getLongExtra("callbackHandle", 0),
-            intent.action!!,
+            appOnForeground,
             intent.getSerializableExtra("intentData"),
         )
 
