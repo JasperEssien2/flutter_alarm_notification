@@ -83,6 +83,7 @@ class NotificationBuilder {
 
   final List<NotificationAction>? actions;
 
+
   Map<String, dynamic> get toMap {
     return {
       'notification_title': notificationTitle,
@@ -100,13 +101,21 @@ class NotificationAction {
   NotificationAction({
     required this.actionText,
     required this.data,
+    this.launchAppOnTap = true,
   });
 
   final Map<String, String> data;
+
+  /// Action button text
   final String actionText;
+
+  /// A flag to control whether to launch app when this
+  /// action button is tapped on
+  final bool launchAppOnTap;
 
   Map<String, dynamic> get toMap => {
         'action_text': actionText,
         'data': data,
+        'launch_app_on_tap' : launchAppOnTap,
       };
 }

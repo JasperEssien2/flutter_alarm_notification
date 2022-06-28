@@ -95,6 +95,7 @@ NotificationBuilder(
         NotificationAction(
             actionText: "Cancel",
             data: {"negative": 'go'},
+            launchAppOnTap: false,
         ),
     ],
 )
@@ -109,7 +110,7 @@ There are two ways of handling notification actions.
 1. Pass a callback function during initialization, like this.
     ```dart
     FlutterAlarmNotification.initialize(
-        actionCallback: (action, data) {
+        actionCallback: (message) {
             ///TODO: Write code to handle notification action 
         },
     );
@@ -127,12 +128,11 @@ There are two ways of handling notification actions.
         });
 
         /// If there was a pending event before [HomeScreen] was created, handle it
-        final last = FlutterAlarmNotification.cache;
+        final cachedMessage = await FlutterAlarmNotification.cachedMessage;
 
-        if (last.isNotEmpty) {
-            _pushNewScreen(last);
+        if (cachedMessage != null) {
+            _pushNewScreen(cachedMessage);
         }
-       
     }
 
     void _pushNewScreen(message) {
@@ -140,15 +140,13 @@ There are two ways of handling notification actions.
             context,
             MaterialPageRoute(
                 builder: (c) => SecondScreen(
-                /// Gets the notification action text
-                action: message['action'],
-                /// Get the notification data
-                data: message['data'].toString(),
+                 data: message.toString(),
                 ),
             ),
         );
     }
     ```
+    > The method `_listenToAction()` can be called in the `initState()` of a `StatefulWidget` to handle events.
 
 This plugin is still in its early stages, as such is missing some implementations. Feel free to contribute to this project.
 

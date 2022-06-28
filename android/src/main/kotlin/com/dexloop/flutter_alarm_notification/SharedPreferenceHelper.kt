@@ -8,12 +8,12 @@ class SharedPreferenceHelper {
 
 
     companion object {
-        private const val PREFERENCE_KEY: String = "fullScreenAlarm";
+        private const val PREFERENCE_KEY: String = "fullScreenAlarm"
 
         private lateinit var sharedPref: SharedPreferences
 
         fun cacheAlarmSettings(context: Context, alarmConfig: AlarmConfig) {
-            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
+            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
 
             val jsonString = Gson().toJson(alarmConfig)
 
@@ -49,9 +49,26 @@ class SharedPreferenceHelper {
         }
 
         fun removeAlarmSettingsCache(context: Context, requestId: Int) {
-            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
+            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
             sharedPref.edit().remove(requestId.toString()).apply()
 
+        }
+
+        fun cacheActionMessage(context: Context, message: HashMap<String, Any>) {
+            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
+
+            val jsonString = Gson().toJson(message)
+
+            sharedPref.edit().putString("action_message", jsonString).apply()
+        }
+
+        fun retrieveActionMessage(context: Context): String? {
+            sharedPref = context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE)
+
+            val actionMessage = sharedPref.getString("action_message", null)
+            sharedPref.edit().remove("action_message").apply()
+
+            return actionMessage
         }
     }
 

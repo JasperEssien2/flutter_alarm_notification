@@ -14,7 +14,7 @@ void callbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
 
   backgroundChannel.setMethodCallHandler(
-    (call) async {
+        (call) async {
       final args = call.arguments;
 
       final callbackThis = PluginUtilities.getCallbackFromHandle(
@@ -22,10 +22,10 @@ void callbackDispatcher() {
 
       assert(callbackThis != null);
 
-      String action = args[1];
-      Map data = args[2];
+      bool fromForeground = args[1];
+      Map message = args[2];
 
-      callbackThis!(action, data);
+      callbackThis!(fromForeground, message);
     },
   );
 }
@@ -36,8 +36,7 @@ abstract class FlutterAlarmNotificationPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static FlutterAlarmNotificationPlatform _instance =
-      MethodChannelFlutterAlarmNotification();
+  static FlutterAlarmNotificationPlatform _instance = MethodChannelFlutterAlarmNotification();
 
   /// The default instance of [FlutterAlarmNotificationPlatform] to use.
   ///
@@ -63,7 +62,7 @@ abstract class FlutterAlarmNotificationPlatform extends PlatformInterface {
   Future<void> registerRepeatingAlarm({
     required AlarmConfig alarmConfig,
     required NotificationBuilder notificationBuilder,
-    required Function(dynamic action, Map data) onAction,
+    required Function(bool fromForeground, Map data) onAction,
   });
 
   Future<bool> cancelAlarm(int requestId);
@@ -73,4 +72,6 @@ abstract class FlutterAlarmNotificationPlatform extends PlatformInterface {
   Future<void> dismissNotification();
 
   Future<void> initializeService(int callbackRaw);
+
+  Future<String?> retrieveCachedMessage();
 }
