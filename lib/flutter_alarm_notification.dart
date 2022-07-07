@@ -27,7 +27,9 @@ class FlutterAlarmNotification {
 
   static registerPort({NotificationActionCallback? callback}) {
     IsolateNameServer.registerPortWithName(
-        _uiReceivePort.sendPort, _buttonActionIsolateName);
+      _uiReceivePort.sendPort,
+      _buttonActionIsolateName,
+    );
 
     if (callback != null) {
       listenable.listen((message) {
@@ -64,7 +66,7 @@ class FlutterAlarmNotification {
   /// Set a recursive alarms that sets of at a particular time
   /// and repeats at an interval
   /// To set configurations for this alram use [alarmConfig]
-  /// [nottificationBuilder] accepts fields that's pertaining to the notification
+  /// [notificationBuilder] accepts fields that's pertaining to the notification
   /// if you need to pass data to the intent set [intentBuilder] parameter .
   static Future<void> registerRepeatingAlarm({
     required AlarmConfig alarmConfig,
