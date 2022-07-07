@@ -35,6 +35,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -64,7 +65,7 @@ fun Context.showNotification(
             longArrayOf(
                 0, 100, 200, 300
             )
-        ).setSilent(false).setOnlyAlertOnce(true)
+        ).setSilent(false)
         .setFullScreenIntent(
             pendingIntent(
                 requestCode = 35,
@@ -132,10 +133,12 @@ private fun NotificationManager.buildChannel(
         }
 
         channel.enableLights(true)
+
         val notificationSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         val audioAttributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_ALARM)
+            .setLegacyStreamType(AudioManager.STREAM_ALARM)
             .build()
         channel.setSound(notificationSound, audioAttributes)
 
