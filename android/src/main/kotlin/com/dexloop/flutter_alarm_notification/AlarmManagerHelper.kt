@@ -291,14 +291,10 @@ data class AlarmConfig(
 
                 set(Calendar.SECOND, alarmSecond ?: 0)
 
-                Log.i("AlarmManagerHelper", "INstance of ${this.get(Calendar.DATE)}")
-
                 if(this <= Calendar.getInstance()){
                     // Add an additional day, if alarm is set before "now" time
                     // to prevent alarm from getting triggered
                     set(Calendar.DATE, this.get(Calendar.DATE) + 1)
-
-                    Log.i("AlarmManagerHelper", "NEW DATE ${this.get(Calendar.DATE)}")
                 }
 
 
